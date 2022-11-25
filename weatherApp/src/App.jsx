@@ -1,25 +1,33 @@
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 
 function App() {
 
+const ref = useRef(null)
 const apiKey = "fbbdfa582896093b8da1f248bec231ee"
 const [weatherData, setWeatherData] = useState({})
 const [city, setCity] = useState({})
 
+
+const handleClick = (e) => {
+  fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`)
+  .then (response => response.json())
+  .then (data => {setWeatherData(data), setCity("")})
+  ref.current.value = '';
+};
+
 const getWeather = (e) =>{
   if(e.key == "Enter"){
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`)
-    .then (response => response.json())
-    .then (data => {setWeatherData(data), setCity("")})
+    handleClick()
   }
 }
 
   return(
     <div className="container">
       <h2 className="m-10">What is the weather like in ... ?</h2>
-      <input className="input" onChange={e => setCity (e.target.value)} onKeyPress={getWeather} placeholder="Search a city" />
+      <input className="input" ref={ref} onChange={e => setCity (e.target.value)} onKeyPress={getWeather} placeholder="Search a city" />
+      <button className="" onClick={handleClick}>Search</button>
       {typeof weatherData.main === "undefined"?(
         <div>
           <p>Please enter a city</p>
