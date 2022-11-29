@@ -1,5 +1,8 @@
 
 import { useState, useRef } from "react"
+// import Today from "./components/today"
+import {formatDate} from "./utils/formatDate"
+import { emojis } from "./utils/emojis"
 
 
 function App() {
@@ -19,11 +22,9 @@ const handleClick = (e) => {
 
   fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=${apiKey}`) /*weather forecast of the five next days*/
   .then (response => response.json())
-  .then (data => {setNextDays(data), setForecastArray([data.list[8],data.list[16],data.list[24],data.list[32],data.list[39]])})
-
+  .then (data => {setNextDays(data), setForecastArray([data.list[7],data.list[15],data.list[23],data.list[31],data.list[39]])})
   
 };
-// console.log(forecastArray);
 
 const getWeather = (e) =>{
   if(e.key == "Enter"){
@@ -32,41 +33,45 @@ const getWeather = (e) =>{
 }
 
   return(
-    <div className="container m-5">
-      <h2 className="my-5">What is the weather like in ... ?</h2>
-      <div className="flex flex-wrap justify-center bg-purple-100">
-        <input className="input my-5" ref={ref} onChange={e => setCity (e.target.value)} onKeyPress={getWeather} placeholder="Search a city" />
-        <button className=" p-2 bg-pink-300" onClick={handleClick}>Search</button>
+    <div  className="container w-fit mx-3 justify-center md:mx-10">
+      <h2 className="mt-10 mb-5">What is the weather like in ... ?</h2>
+      <div className="flex flex-wrap w-fit p-2 bg-cyan-300">
+        <input className="input pl-2" ref={ref} onChange={e => setCity (e.target.value)} onKeyPress={getWeather} placeholder="Search a city" />
+        <button className=" p-2" onClick={handleClick}>Search</button>
       </div>
-      {typeof weatherData.main === "undefined"?(
-        <div>
-          <p></p>
-        </div>):
-              ( <div>
-          <div>
-            <p>Today</p>
-            <p>{weatherData.name}</p> {/*display name of city*/}
-            <p>{Math.round (weatherData.main.temp)}°C</p> {/*display temperature*/}
-            <p>{weatherData.weather[0].main}</p> {/*display weather */}
-            <p>{Math.round (weatherData.main.humidity)}%</p> 
+    <div>
+      {typeof weatherData.main === 'undefined'?(
+        <p className="mt-2">Please enter a city</p>
+      ):
+      (<div className= "w-fit">
+        <div className="max-w-max xl:ml-auto mx-auto">
+          <p className="mb-5 mt-12 text-xl xl:pl-4">Today in {weatherData.name}</p> 
+            {/*display name of city*/}
+          <div className="flex mb-20 mt-12 flex-col justify-center text-xl ml-12 xl:pl-4 xl:border-l-2 xl:border-l-indigo-500">
+            <p>{Math.round (weatherData.main.temp)}°C</p>
+            {/*display temperature*/}
+            <p>{weatherData.weather[0].main}</p>
+            {/*display weather */}
+            <p>Humidity : {Math.round (weatherData.main.humidity)}%</p> 
+            <p>{emojis.wind} Wind: {weatherData.wind.speed}km/h</p>
+            <p>{weatherData.sys.sunrise}</p> 
           </div>
-          <div>
-            <p>Next days</p>
-            <ul>
-              {forecastArray?.map((day)=>
-              <li key="">
-                <p>{day.dt_txt}</p>
+        </div>
+      <div className="my-10">
+          <p  className="text-lg font-bold ml-6">Next days</p>
+          <ul className="text-center m-6 p-3 rounded-md bg-white/30 shadow-md flex flex-wrap justify-around items-center sm:flex-row">
+            {forecastArray?.map((day)=>
+              <li className="m-2">
+                <p>{emojis.calendar}{day.dt_txt}</p>
                 <p>{Math.round (day.main.temp)}°C</p> 
                 <p>{day.weather[0].main}</p>
-                <p>{Math.round (day.main.humidity)}%</p>
               </li>)}
-            </ul>
+          </ul>
           </div>
         </div>
       )}
-     
-    </div>
-  )
+      </div>
+    </div>)
 }
 
 export default App
