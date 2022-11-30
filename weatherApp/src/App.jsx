@@ -2,6 +2,7 @@
 import { useState, useRef } from "react"
 import { emojis } from "./utils/emojis"
 import Moment from "moment"
+import axios from "axios"
 
 
 function App() {
@@ -19,10 +20,12 @@ const [forecastArray, setForecastArray] = useState ([])
 
 const handleClick = (e) => {
   let randomNumber = Math.floor(Math.random() * 10);
-  fetch(`https://unsplash.com/search/photo?query=${city}?client_id=${unsplachKey}`) /*display image*/
-  .then (response => response.json())
-  .then (data => { let allImages = data.results[randomNumber];
-    return allImages.urls.regular})
+  axios.get(`https://api.unsplash.com/search/photos?query=${city}&client_id=laoDs_YhFMrMv-5iCD_iFUwJCsM38z2DJJph5-FPeNM`) /*display image*/
+  .then (res => {
+    let image = res.data.results[randomNumber]
+    setCityImage(image.urls.small),
+    setCity("")
+} )
 
 
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`) /*weather of the day*/
@@ -54,11 +57,11 @@ const getWeather = (e) =>{
         <p className="mt-2">Please enter a city</p>
       ):
       (<div className= "bg-gradient-to-r from-pink-500 to-yellow-500 mt-10 rounded-lg shadow-lg px-4 py-4 xl:py-12 xl:px-28 md:px-12 md:py-8">
-        <div className="flex flex-col justify-center items-center xl:ml-auto mx-auto">
-          <img src="" alt="" />
-          <p className="mb-5 mt-12 text-xl xl:pl-4">Today in {weatherData.name}</p> 
-            {/*display name of city*/}
+        <div className="flex flex-col md:flex-row justify-center items-center xl:ml-auto mx-auto">
+          <img className= "rounded shadow[ 0_0_8px_8px_rgba(0,0,0,0.3)]" src={cityImage} alt="city"  />
           <div className="m-6 p-3 flex flex-col justify-center items-center">
+            <p className="mb-5 mt-12 text-xl xl:pl-4">Today in {weatherData.name}</p> 
+            {/*display name of city*/}
             <p>{Math.round (weatherData.main.temp)}°C</p>
             {/*display temperature*/}
             <p>{weatherData.weather[0].main}</p>
