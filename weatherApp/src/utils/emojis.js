@@ -6,4 +6,6 @@ export const emojis = {
     sun: "☀️",
     wind: "💨",
     calendar: "📆",
+    thunder: "🌩️",
+    mist:"‍🌫️",
   };

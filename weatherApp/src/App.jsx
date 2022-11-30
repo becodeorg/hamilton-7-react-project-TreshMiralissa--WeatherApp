@@ -1,6 +1,7 @@
 
 import { useState, useRef } from "react"
 import { emojis } from "./utils/emojis"
+import { getEmojis } from "./utils/getEmojis"
 import Moment from "moment"
 import axios from "axios"
 
@@ -17,10 +18,9 @@ const [nextDays, setNextDays] = useState({})
 const [forecastArray, setForecastArray] = useState ([])
 
 
-
 const handleClick = (e) => {
   let randomNumber = Math.floor(Math.random() * 10);
-  axios.get(`https://api.unsplash.com/search/photos?query=${city}&client_id=laoDs_YhFMrMv-5iCD_iFUwJCsM38z2DJJph5-FPeNM`) /*display image*/
+  axios.get(`https://api.unsplash.com/search/photos?query=${city}&orientation=landscape&client_id=laoDs_YhFMrMv-5iCD_iFUwJCsM38z2DJJph5-FPeNM`) /*display image*/
   .then (res => {
     let image = res.data.results[randomNumber]
     setCityImage(image.urls.small),
@@ -30,8 +30,9 @@ const handleClick = (e) => {
 
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`) /*weather of the day*/
   .then (response => response.json())
-  .then (data => {setWeatherData(data), setCity("")})
+  .then (data => {setWeatherData(data), setCity(""), console.log(data);})
   ref.current.value = '';
+
 
   fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=${apiKey}`) /*weather forecast of the five next days*/
   .then (response => response.json())
@@ -44,6 +45,8 @@ const getWeather = (e) =>{
     handleClick()
   }
 }
+
+
 
   return(
     <div  className="container ">
@@ -64,7 +67,7 @@ const getWeather = (e) =>{
             {/*display name of city*/}
             <p>{Math.round (weatherData.main.temp)}°C</p>
             {/*display temperature*/}
-            <p>{weatherData.weather[0].main}</p>
+            <p>{getEmojis(weatherData.weather[0].main)}{weatherData.weather[0].main}</p>
             {/*display weather */}
             <p>Humidity : {Math.round (weatherData.main.humidity)}%</p> 
             <p>{emojis.wind} Wind: {weatherData.wind.speed}km/h</p>
@@ -77,7 +80,7 @@ const getWeather = (e) =>{
               <div className="text-center p-6 rounded-md bg-white/30 shadow-md flex justify-center items-center flex-col">
                 <p>{emojis.calendar}{Moment(day.dt_txt).format('MM-DD-YYYY')}</p>
                 <p>{Math.round (day.main.temp)}°C</p> 
-                <p>{day.weather[0].main}</p>
+                <p>{getEmojis(day.weather[0].main)}{day.weather[0].main}</p>
               </div>)}
             </div>
           </div>
