@@ -30,7 +30,7 @@ const handleClick = (e) => {
 
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`) /*weather of the day*/
   .then (response => response.json())
-  .then (data => {setWeatherData(data), setCity(""), console.log(data);})
+  .then (data => {setWeatherData(data), setCity("");})
   ref.current.value = '';
 
 
@@ -49,7 +49,7 @@ const getWeather = (e) =>{
 
 
   return(
-    <div  className="container ">
+    <div  className="container">
       <h2 className="mt-10 mb-5">What is the weather like in ... ?</h2>
       <div className="flex flex-wrap w-fit p-2 rounded bg-gradient-to-r from-pink-500 to-yellow-500">
         <input className="input pl-2" ref={ref} onChange={e => setCity (e.target.value)} onKeyPress={getWeather} placeholder="Search a city" />
@@ -78,7 +78,8 @@ const getWeather = (e) =>{
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3 xl:grid-cols-5">
             {forecastArray?.map((day)=>
               <div className="text-center p-6 rounded-md bg-white/30 shadow-md flex justify-center items-center flex-col">
-                <p>{emojis.calendar}{Moment(day.dt_txt).format('MM-DD-YYYY')}</p>
+                <p>{emojis.calendar}{Moment(day.dt_txt).format('dddd')}</p>
+                <p>{Moment(day.dt_txt).format('MM-DD-YYYY')}</p>
                 <p>{Math.round (day.main.temp)}°C</p> 
                 <p>{getEmojis(day.weather[0].main)}{day.weather[0].main}</p>
               </div>)}
