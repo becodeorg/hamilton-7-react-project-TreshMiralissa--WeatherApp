@@ -51,7 +51,7 @@ const getWeather = (e) =>{
       </div>
     <div>
       {typeof weatherData.main === 'undefined'?(
-        <p className="mt-2"></p>
+        <p className="mt-2">Please enter a city</p>
       ):
       (<div className= "bg-gradient-to-r from-pink-500 to-yellow-500 mt-10 rounded-lg shadow-lg px-4 py-4 xl:py-12 xl:px-28 md:px-12 md:py-8">
         <div className="flex flex-col justify-center items-center xl:ml-auto mx-auto">
