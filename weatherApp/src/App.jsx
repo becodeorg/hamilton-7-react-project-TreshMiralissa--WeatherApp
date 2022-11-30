@@ -25,7 +25,7 @@ const handleClick = (e) => {
     return allImages.urls.regular})
 
 
-  fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`) /*weather of the day*/
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`) /*weather of the day*/
   .then (response => response.json())
   .then (data => {setWeatherData(data), setCity("")})
   ref.current.value = '';
