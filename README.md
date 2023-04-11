@@ -25,7 +25,3 @@ HTML, CSS and JavaScript.
 ## **Tools?**
 
 React and Tailwind.
-
-## **What was the easiest part ?**
-
-## **What was the hardest part ?**
